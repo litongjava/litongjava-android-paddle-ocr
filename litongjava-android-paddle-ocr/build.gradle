@@ -1,0 +1,130 @@
+plugins {
+  id 'com.android.library'
+  id 'maven'
+  id 'signing'
+}
+
+android {
+  compileSdkVersion 31
+  buildToolsVersion "32.0.0"
+
+  defaultConfig {
+    minSdkVersion 16
+    targetSdkVersion 31
+    versionCode 1
+    versionName "1.0"
+
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    consumerProguardFiles "consumer-rules.pro"
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
+  }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+}
+
+dependencies {
+}
+
+// 生成jar包的task
+task sourcesJar(type: Jar) {
+  from android.sourceSets.main.java.srcDirs
+  classifier = 'sources'
+}
+
+artifacts {
+  archives sourcesJar
+}
+// 签名
+signing {
+  sign configurations.archives
+}
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      //repository(url: LOCAL_REPO_URL)
+      repository(url: LOCAL_REPO_URL)
+      pom.project {
+        name ARTIFACT_ID
+        groupId GROUP_ID
+        artifactId ARTIFACT_ID
+        version LIBRARY_VERSION
+        packaging 'aar'
+
+        licenses {
+          license {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            distribution 'repo'
+          }
+        }
+        developers {
+          developer {
+            id 'litongjava'
+            name 'litongjava'
+          }
+        }
+      }
+    }
+  }
+
+  /*
+  repositories {
+    mavenDeployer {
+      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+      repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
+        authentication(userName: ossrhUsername, password: ossrhPassword)
+      }
+
+      snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+        authentication(userName: ossrhUsername, password: ossrhPassword)
+      }
+
+      pom.project {
+        name ARTIFACT_ID
+        groupId GROUP_ID
+        artifactId ARTIFACT_ID
+        version LIBRARY_VERSION
+        packaging 'aar'// 资源类型
+        description 'Android开发工具类'// 描述
+        url 'https://github.com/litongjava/litongjava-android-paddle-ocr'
+
+        scm {
+          connection 'scm:git@github.com:litongjava/litongjava-android-paddle-ocr.git'
+          developerConnection 'git@github.com:litongjava/litongjava-android-paddle-ocr.git'
+          url 'https://github.com/litongjava/litongjava-android-paddle-ocr'
+        }
+
+        licenses {
+          license {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            distribution 'repo'
+          }
+        }
+        developers {
+          developer {
+            id 'litongjava'
+            name 'litongjava'
+          }
+        }
+      }
+    }
+  }
+
+   */
+}

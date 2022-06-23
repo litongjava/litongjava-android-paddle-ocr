@@ -1,0 +1,3 @@
+include ':litongjava-android-paddle-ocr'
+include ':app'
+rootProject.name = "litongjava-android-paddle-ocr"
